@@ -11,6 +11,7 @@
 typedef struct _NodoA{
     char caracter;
 	int frecuencia;
+	char codigo[8];
 	struct _NodoA *izquierda;
 	struct _NodoA *derecha;
 }Arbol;
@@ -32,6 +33,7 @@ Arbol * crearArbol(int frecuencia,char caracter){
 	nuevo = (Arbol *)malloc(sizeof(Arbol));
 	nuevo->caracter = caracter;
 	nuevo->frecuencia = frecuencia;
+	strcpy(nuevo -> codigo, " ");
 	nuevo->izquierda=NULL;
 	nuevo->derecha=NULL;
 	return nuevo;
@@ -44,12 +46,24 @@ Lista * crearLista(char caracter, int frecuencia, Arbol * arbol){
 	nuevo = (Lista *) malloc (sizeof(Lista));
 	nuevo -> frecuencia = frecuencia;
 	nuevo -> caracter = caracter;
+	strcpy(nuevo -> codigo, " ");
 	nuevo -> Arbol = arbol;
 	nuevo -> sig = NULL;
 	nuevo -> anterior = NULL;
 	return nuevo;
  }
 
+Lista * crearListaBi(char caracter, int frecuencia, Arbol * arbol, char binario [8]){
+   Lista *nuevo;
+	nuevo = (Lista *) malloc (sizeof(Lista));
+	nuevo -> frecuencia = frecuencia;
+	nuevo -> caracter = caracter;
+	strcpy(nuevo -> codigo, binario);
+	nuevo -> Arbol = arbol;
+	nuevo -> sig = NULL;
+	nuevo -> anterior = NULL;
+	return nuevo;
+ }
  //Insertar datos en el arbol
 /*
 Nodo *insertarArbol(Nodo * arbol, int frecuencia,char caracter){
@@ -97,7 +111,17 @@ Lista * insertarInicio(char caracter, int frecuencia, Lista *inicio,Arbol * arbo
     }
     return nuevo;
  }
-
+ 
+Lista * insertarInicioBi(char caracter, int frecuencia, Lista *inicio,Arbol * arbol, char binario[8]){
+    Lista * nuevo;
+    nuevo = crearListaBi(caracter,frecuencia,arbol,binario);
+    if(inicio != NULL){
+        nuevo->sig = inicio;
+        inicio->anterior = nuevo;
+    }
+    return nuevo;
+ }
+ 
  Lista * insertarFinal(char caracter, int frecuencia, Lista *inicio,Arbol * arbol){
    	Lista *nuevo;
 	Lista *aux;
@@ -649,8 +673,8 @@ void borrarArbol(Nodo ** arbol, int buscar){
 char x[8] = {" "};
 int i=0;
 char vacio[8] = {" "};
-/*
-void agregarBinario(Lista *lista, char binario[8], char caracter){
+
+/*Lista * agregarBinario(Lista *lista, char binario[8], char caracter){
 	int j;
 	for(j=0; j<contarElementosLista(lista); j++){
 		if(caracter == lista -> caracter){
@@ -661,7 +685,7 @@ void agregarBinario(Lista *lista, char binario[8], char caracter){
 			lista = lista -> sig;
 		}	
 	}
-	
+	return lista;	
 }*/
 void postorden(Arbol * raiz, Arbol * raiz1 , int dir){
 	
@@ -687,13 +711,29 @@ void postorden(Arbol * raiz, Arbol * raiz1 , int dir){
 		postorden(raiz->derecha,raiz1,1);
 		
 		printf("Caracter: %c\tFrecuencia: %d Codigo: %s \n",raiz->caracter,raiz->frecuencia, x);
-	//	agregarBinario(lista, x,raiz->caracter);
+		strcpy(raiz -> codigo, x);
+		//agregarBinario(lista, x,raiz->caracter);
 		x[i]=' ';
 		i--;
 	}
-	
 }
 
+Lista * postordenAgregar(Arbol * raiz, Lista * lista){
+
+	if(raiz!=NULL){
+		
+		lista = postordenAgregar(raiz->izquierda,lista);
+		lista = postordenAgregar(raiz->derecha,lista);
+		if(raiz -> caracter != '*')
+		lista = insertarInicioBi(raiz->caracter,raiz->frecuencia, lista,NULL, raiz -> codigo);	
+		printf("Caracter: %c\tFrecuencia: %d Codigo: %s \n",raiz->caracter,raiz->frecuencia, raiz -> codigo);
+		
+		
+		
+	}
+	
+	return lista;
+}
 
 
 #endif _ARJA_2020640024_h
