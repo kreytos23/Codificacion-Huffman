@@ -4,3 +4,5 @@ Pasos Para Usar:
 La frase que quieras comprimir se cambia en el archivo "frase.txt"
 El programa diferencia acentos y mayusculas.
 Una vez terminado el proceso se genera el codigo en binario de la frase en "codigo.bin" y se genera tu arbol binario en postorder en "llave.txt"
+
+**La codificacion del archivo de la frase a leer debe estar en codificacion ANSII**
