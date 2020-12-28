@@ -1,7 +1,8 @@
 #include "MMCS_2020640287.h"
-#include <math.h>
 
 char fraseCadena[100];
+void leerArchivo(FILE* frase, char fraseCadena[100]);
+void limpiarFrase(char fraseCadena[100]);
 void limpiarEspacio(char cadena[200],char fraseCadena[100],Lista* binLimpio);
 void agregarCeros(char cadena[200]);
 void binarioDecimal(char cadena[200]);
@@ -9,6 +10,7 @@ void binarioDecimal(char cadena[200]);
 int main (){
 
 	FILE *frase = fopen("frase.txt","r");
+	FILE *bin = fopen("llave.txt","w");
     Lista * listaAux = NULL;
     Arbol * arbolAux = NULL;
     Lista * binLimpio = NULL;
@@ -20,54 +22,97 @@ int main (){
     printf("\n\tMartin Moreno Cesar Sadrak 2020640287 UPIITA_IPN\n\n");
     printf("\t\t***Codificacion Huffman***\n\n");
     
-    if(frase != NULL){
+    leerArchivo(frase,fraseCadena);
+	fclose(frase);
+	printf("\nFrase leida: %s\n",fraseCadena);
+	
+	limpiarFrase(fraseCadena);
+	printf("\n\nFrase leida limpia: %s\n",fraseCadena);
+	
+	listaAux = listaFrecuencia(fraseCadena);
+	listaAux=ordenarLista(listaAux);
+	
+	printf("\n***Lista de frecuencias de caracteres***\n");
+	verLista(listaAux);
+	
+	generarFrecuencia(listaAux,listaAux,&arbolAux);
+	
+	crearCodigos(arbolAux,arbolAux,2);
+	
+	binLimpio = quitarEspeciales(arbolAux,binLimpio);
+	
+	limpiarEspacio(binarioString,fraseCadena,binLimpio);
+	
+	agregarCeros(binarioString);
+	
+	printf("\n\n***Codigos binarios y Decimales con caracteres***\n");
+	verLista(binLimpio);
+	
+	printf("\n\n***Codigos binarios y Decimales para compresion***\n");
+	binarioDecimal(binarioString);
+	
+	imprimirArbolPost(arbolAux,bin);
+	fclose(bin);
+	
+	printf("\n\n***Codigo Binario***\n\n");
+	printf("%s\n\n", binarioString);
+	printf("\nEl archivo con el codigo se ha generado como codigo.bin \ny la llave se ha generado como llave.txt\n\n");
+	
+return 0;
+}
+
+void leerArchivo(FILE* frase, char fraseCadena[100]){
+	int e = 0;
+	
+	if(frase == NULL){
+		perror("error en la apertura de archivo");
+	}
+	
+	if(frase != NULL){
 		while(feof(frase) == 0){
 			fscanf(frase,"%c",&fraseCadena[e]);
 			e++;
 		}
 	}
-	fclose(frase);
+}
+
+void limpiarFrase(char fraseCadena[100]){
+	int i = 0;
+	int j = 0;
 	
-	printf("\nFrase leida: %s\n",fraseCadena);
+	while(fraseCadena[j] != '\0'){
+		switch(fraseCadena[j]){
+			case 'Á':
+			case 'á':
+				fraseCadena[j] = 'a';
+				break;
+			case 'É':
+			case 'é':
+				fraseCadena[j] = 'e';
+				break;
+			case 'Í':
+			case 'í':
+				fraseCadena[j] = 'i';
+				break;
+			case 'Ó':
+			case 'ó':
+				fraseCadena[j] = 'o';
+				break;
+			case 'Ú':
+			case 'ú':
+				fraseCadena[j] = 'u';
+				break;
+		}
+		j++;
+	}
 	
-    for(i = 0; fraseCadena[i] != '\0'; i++){
+	for(i = 0; fraseCadena[i] != '\0'; i++){
         if(fraseCadena[i] == ' '){
             fraseCadena[i] = '_';
         }else{
             fraseCadena[i] = tolower(fraseCadena[i]);
         }
     }
-    
-
-listaAux = generarListaFrecuencia(fraseCadena);
-
-listaAux=ordenarLista(listaAux);
-
-printf("\n***Lista de frecuencias de caracteres***\n");
-verLista(listaAux);
-
-generarFrecuencia(listaAux,listaAux,&arbolAux);
-
-crearCodigos(arbolAux,arbolAux,2);
-
-binLimpio = quitarEspeciales(arbolAux,binLimpio);
-
-limpiarEspacio(binarioString,fraseCadena,binLimpio);
-
-agregarCeros(binarioString);
-
-printf("\n\n***Codigos binarios y Decimales***\n");
-binarioDecimal(binarioString);
-
-imprimirArbolPost(arbolAux);
-
-printf("\n\n***Codigo Binario***\n\n");
-printf("%s\n\n", binarioString);
-
-printf("\nEl archivo con el codigo se ha generado como codigo.bin \ny la llave se ha generado como llave.txt\n\n");
-
-
-return 0;
 }
 
 void limpiarEspacio(char cadena[200],char fraseCadena[100],Lista* binLimpio){

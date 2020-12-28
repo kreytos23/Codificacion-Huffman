@@ -3,11 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <math.h>
 #include <string.h>
-#define MAXIMO(i,d) (((i)>(d))?(i):(d))
 
-
-//Declaración del arbol
 typedef struct _Hoja {
     char caracter;
 	int frecuencia;
@@ -16,7 +14,6 @@ typedef struct _Hoja {
 	struct _Hoja *derecha;
 }Arbol;
 
-//Declaración de la lista
 typedef struct _Nodo{
     char caracter;
     int frecuencia;
@@ -25,8 +22,6 @@ typedef struct _Nodo{
     struct _Nodo *anterior;
     struct Arbol *Arbol;
 }Lista;
-
-//Crear arbol
 
 Arbol * crearArbol(int frecuencia,char caracter){
 	Arbol * nuevo;
@@ -39,7 +34,6 @@ Arbol * crearArbol(int frecuencia,char caracter){
 	return nuevo;
 }
 
-//Crear lista
 Lista * crearLista(char caracter, int frecuencia, Arbol * arbol){
    Lista *nuevo;
 	nuevo = (Lista *) malloc (sizeof(Lista));
@@ -84,7 +78,7 @@ Lista * insertarInicioBi(char caracter, int frecuencia, Lista *inicio,Arbol * ar
     return nuevo;
  }
  
- Lista * insertarFinal(char caracter, int frecuencia, Lista *inicio,Arbol * arbol){
+Lista * insertarFinal(char caracter, int frecuencia, Lista *inicio,Arbol * arbol){
    	Lista *nuevo;
 	Lista *aux;
 	nuevo = crearLista(caracter,frecuencia,arbol);
@@ -101,7 +95,7 @@ Lista * insertarInicioBi(char caracter, int frecuencia, Lista *inicio,Arbol * ar
     return inicio;
  }
 
- Lista * insertarMedio(char caracter,  int frecuencia, int posicion, Lista *inicio, Arbol * arbol){
+Lista * insertarMedio(char caracter,  int frecuencia, int posicion, Lista *inicio, Arbol * arbol){
     Lista *aux = NULL;
     Lista *nuevo = NULL;
     nuevo = crearLista(caracter,frecuencia,arbol);
@@ -127,35 +121,18 @@ Lista * insertarInicioBi(char caracter, int frecuencia, Lista *inicio,Arbol * ar
     return inicio;
  }
 
-
-//Tamanio de la lista
-   int contarElementosLista(Lista *inicio){
-    int total = 0;
-    if(inicio == NULL){
-        total = 0;
-     }else{
-        while(inicio != NULL){
-            total++;
-            inicio = inicio ->sig;
-        }
-     }
-    return total;
+Lista *  borrarInicio(Lista * inicio){
+    Lista * aux;
+	aux=inicio;
+	if(inicio !=NULL){
+		inicio=inicio->sig;
+		inicio ->anterior = NULL;
+		free(aux);
+	}
+    return inicio;
  }
-
- //Ver lista
-void verLista(Lista *inicio){
-     if(inicio == NULL){
-        printf("La lista esta vacia");
-     }else{
-        while(inicio != NULL){
-            printf("\nCaracter: %c\t Frecuencia: %d Codigo: %s",inicio->caracter,inicio->frecuencia, inicio ->codigo);
-            inicio = inicio ->sig;
-        }
-     }
- }
-
- //Generar la lista de frecuencia
- Lista * generarListaFrecuencia(char frase[100]){
+ 
+Lista * listaFrecuencia(char frase[100]){
 
      Lista * nuevo = NULL;
      Lista * aux = NULL;
@@ -195,7 +172,31 @@ void verLista(Lista *inicio){
     return nuevo;
 
  }
-//Ordenar lista de frecuencia
+
+int contarElementosLista(Lista *inicio){
+    int total = 0;
+    if(inicio == NULL){
+        total = 0;
+     }else{
+        while(inicio != NULL){
+            total++;
+            inicio = inicio ->sig;
+        }
+     }
+    return total;
+ }
+
+void verLista(Lista *inicio){
+     if(inicio == NULL){
+        printf("La lista esta vacia");
+     }else{
+        while(inicio != NULL){
+            printf("\nCaracter: %c\t Frecuencia: %d Codigo: %s",inicio->caracter,inicio->frecuencia, inicio ->codigo);
+            inicio = inicio ->sig;
+        }
+     }
+ }
+ 
 int frecuenciaEnPosicion(int posicion, Lista *inicio){
 	Lista *aux = inicio;
     int x = 0, frecuencia = 0;
@@ -218,20 +219,6 @@ char caracterEnPosicion(int posicion, Lista *inicio){
             }
     return inicio->caracter;
 }
-
-
-//Borrar elementos de la lista
-
- Lista*  borrarInicio(Lista * inicio){
-    Lista * aux;
-	aux=inicio;
-	if(inicio !=NULL){
-		inicio=inicio->sig;
-		inicio ->anterior = NULL;
-		free(aux);
-	}
-    return inicio;
- }
  
 void cambiarValorEn(int posicion, char caracter, int frecuencia, Lista *inicio){
     Lista *aux = inicio;
@@ -268,7 +255,6 @@ Lista * ordenarLista(Lista * inicio){
     }
     return inicio;
 }
-
 
 void generarFrecuencia(Lista * Inicio,Lista * InicioOriginal, Arbol **Raiz){
     Arbol * izquierda;
@@ -333,6 +319,7 @@ void generarFrecuencia(Lista * Inicio,Lista * InicioOriginal, Arbol **Raiz){
 char x[8] = {" "};
 int i=0;
 char vacio[8] = {" "};
+
 void crearCodigos(Arbol * raiz, Arbol * raiz1 , int dir){
 	
 	if (raiz != NULL){
@@ -372,18 +359,15 @@ Lista * quitarEspeciales(Arbol * raiz, Lista * lista){
 	return lista;
 }
 
-void imprimirArbolPost(Arbol * raiz){
-	FILE * arbol = fopen("llave.txt","a");
+void imprimirArbolPost(Arbol * raiz,FILE * arbol){
 	if(arbol == NULL){
 		perror("\nNo se pudo abrir el archivo\n");
 	}
 	if(raiz!=NULL){
-		imprimirArbolPost(raiz->izquierda);
-		imprimirArbolPost(raiz->derecha);
+		imprimirArbolPost(raiz->izquierda,arbol);
+		imprimirArbolPost(raiz->derecha,arbol);
 		fprintf(arbol,"%c %d ",raiz->caracter,raiz->frecuencia);
 	}
-	fclose(arbol);
 }
 
-
-#endif _MMCS_2020640287_h
+#endif
