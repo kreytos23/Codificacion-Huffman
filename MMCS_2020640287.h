@@ -67,7 +67,7 @@ Lista * insertarInicio(char caracter, int frecuencia, Lista *inicio,Arbol * arbo
     }
     return nuevo;
  }
- 
+
 Lista * insertarInicioBi(char caracter, int frecuencia, Lista *inicio,Arbol * arbol, char binario[8]){
     Lista * nuevo;
     nuevo = crearListaBi(caracter,frecuencia,arbol,binario);
@@ -77,7 +77,7 @@ Lista * insertarInicioBi(char caracter, int frecuencia, Lista *inicio,Arbol * ar
     }
     return nuevo;
  }
- 
+
 Lista * insertarFinal(char caracter, int frecuencia, Lista *inicio,Arbol * arbol){
    	Lista *nuevo;
 	Lista *aux;
@@ -131,14 +131,14 @@ Lista *  borrarInicio(Lista * inicio){
 	}
     return inicio;
  }
- 
+
 Lista * listaFrecuencia(char frase[100]){
 
      Lista * nuevo = NULL;
      Lista * aux = NULL;
      int posi = 0, signo = 0;
      int a;
-     
+
     	for(a = 0; a < strlen(frase); a++){
             if(nuevo == NULL){
                 nuevo = insertarInicio(frase[posi],1,nuevo,NULL);
@@ -196,7 +196,7 @@ void verLista(Lista *inicio){
         }
      }
  }
- 
+
 int frecuenciaEnPosicion(int posicion, Lista *inicio){
 	Lista *aux = inicio;
     int x = 0, frecuencia = 0;
@@ -219,7 +219,7 @@ char caracterEnPosicion(int posicion, Lista *inicio){
             }
     return inicio->caracter;
 }
- 
+
 void cambiarValorEn(int posicion, char caracter, int frecuencia, Lista *inicio){
     Lista *aux = inicio;
     int x = 0;
@@ -262,7 +262,7 @@ void generarFrecuencia(Lista * Inicio,Lista * InicioOriginal, Arbol **Raiz){
     Arbol * papa;
     Lista * auxL = InicioOriginal;
     int tamanio = 0, frecuencia_aux=0,aux = 1,posicion = 0;
-    
+
     if(Inicio == NULL){
         while(auxL->sig!=NULL){
             auxL = auxL->sig;
@@ -321,7 +321,7 @@ int i=0;
 char vacio[8] = {" "};
 
 void crearCodigos(Arbol * raiz, Arbol * raiz1 , int dir){
-	
+
 	if (raiz != NULL){
 	if(dir == 0 ){
 		x[i]='0';
@@ -332,8 +332,8 @@ void crearCodigos(Arbol * raiz, Arbol * raiz1 , int dir){
 		i++;
 		}
 	}
-	
-	if(raiz!=NULL){	
+
+	if(raiz!=NULL){
 		crearCodigos(raiz->izquierda,raiz1, 0);
 		if(raiz == raiz1){
 			strcpy(x,vacio);
@@ -349,13 +349,13 @@ void crearCodigos(Arbol * raiz, Arbol * raiz1 , int dir){
 Lista * quitarEspeciales(Arbol * raiz, Lista * lista){
 
 	if(raiz!=NULL){
-		
+
 		lista = quitarEspeciales(raiz->izquierda,lista);
 		lista = quitarEspeciales(raiz->derecha,lista);
 		if(raiz -> caracter != '*')
-		lista = insertarInicioBi(raiz->caracter,raiz->frecuencia, lista,NULL, raiz -> codigo);	
+		lista = insertarInicioBi(raiz->caracter,raiz->frecuencia, lista,NULL, raiz -> codigo);
 	}
-	
+
 	return lista;
 }
 
@@ -369,5 +369,7 @@ void imprimirArbolPost(Arbol * raiz,FILE * arbol){
 		fprintf(arbol,"%c %d ",raiz->caracter,raiz->frecuencia);
 	}
 }
+
+
 
 #endif
