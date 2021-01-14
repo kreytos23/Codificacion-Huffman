@@ -1,19 +1,19 @@
-#ifndef _2020640287_MMCS_h
-#define _2020640287_MMCS_h
+#ifndef _2020640287_deco_MMCS_h
+#define _2020640287_deco_MMCS_h
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 
-typedef struct _NodoL{
+typedef struct _Nodo{
     char caracter;
     int frecuencia;
     char codigo[8];
     int ocupado;
-    struct _NodoL *sig;
-    struct _NodoL *anterior;
-    struct _NodoL *izquierda;
-	struct _NodoL *derecha;
+    struct _Nodo *sig;
+    struct _Nodo *anterior;
+    struct _Nodo *izquierda;
+	struct _Nodo *derecha;
 }Lista;
 
 Lista * crearLista(char caracter, int frecuencia, char binario[8]){
@@ -276,12 +276,11 @@ void postorden( Lista * raiz){
 char codigoEnPosicion(int posicion, Lista *inicio, int index){
     int tamanio = contarElementosLista(inicio);
 	int x=0;
-            for(x = 1; x<posicion;x++){
-                inicio = inicio ->sig;
-            }
-  char codigoS[8] = {""};
-  strcpy(codigoS,inicio->codigo);
-  //printf(" %c Entro Letra %c\n",codigoS[index],inicio->caracter);
+	char codigoS[8] = {""};
+    for(x = 1; x<posicion;x++){
+		inicio = inicio ->sig;
+	}
+  	strcpy(codigoS,inicio->codigo);
     return codigoS[index];
 }
 
@@ -323,4 +322,4 @@ int i = 0,j = 0,index = 0,k = 0,ini = 0;
     }
 }
 
-#endif //_2020640287_MMCS_h
+#endif //_2020640287_deco_MMCS_h

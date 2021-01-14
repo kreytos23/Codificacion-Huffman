@@ -1,4 +1,4 @@
-#include "2020640287_MMCS.h"
+#include "2020640287_deco_MMCS.h"
 
 Lista * leerArchivo(FILE* llave, Lista * listaArbol);
 void generarCodigoBin(FILE * binarioArc, char codigoBinPalabra [500]);
@@ -13,12 +13,13 @@ int main(){
     char palabra [50] = {""},llaveN[30] = {""},llaveB[30] = {""};
     char codigoBinPalabra [500] = {""};
 
+	system("color 0a");
     printf("\t***Martin Moreno Cesar Sadrak 2020640287**\n\n");
     printf("\n\t\t***DECODIFICADOR**\n\n");
-    printf("Escriba el nombre del archivo de la llave: ");
+    printf("Nombre de la llave con extension: ");
     gets(llaveN);
     fflush(stdin);
-    printf("\nEscriba el nombre del archivo binario:");
+    printf("\nNombre del Binario con extension: ");
     gets(llaveB);
     fflush(stdin);
 	
@@ -32,17 +33,20 @@ int main(){
 	fclose(llave);
 	
 	listaArbol = generarListaDeArbol(listaArbol);
-	
-	
 	crearCodigos(listaArbol,listaArbol,2);
-	printf("\nEl codigo binario de la palabra es: \n%s \n",codigoBinPalabra);
+	
+	printf("\n**********************************\n");
+	printf("\nEl codigo binario de la palabra es:\n \n%s \n",codigoBinPalabra);
+	
 	listaLimpia = quitarEspeciales(listaArbol, listaLimpia);
+	
 	printf("\nLas Letras Fueron: \n");
 	verLista(listaLimpia);
 	printf("\n\n");
 	
     generarPalabraCodificada(listaLimpia,codigoBinPalabra,palabra);
-    printf("\n\nLa frase es: %s",palabra);
+    printf("\n\n\tLa Frase Decodificada Es: %s\n",palabra);
+    printf("\n\nLa Frase Decodificada Fue Escrita En El Archivo frase.txt\n",palabra);
     
     frase = fopen("frase.txt","w");
     for(i=0;i<strlen(palabra);i++){
@@ -58,7 +62,8 @@ Lista * leerArchivo(FILE* llave, Lista * listaArbol){
     int frecuencia;
 
 	if(llave == NULL){
-		printf("Archivo no encontrado");
+		perror("\nArchivo de llave no encontrado");
+		exit(0);
 	}else{
 		while(feof(llave) == 0){
 			fscanf(llave,"%c %d",&caracter,&frecuencia);
@@ -78,7 +83,8 @@ void generarCodigoBin(FILE * binarioArc, char codigoBinPalabra [500] ){
     char binNumero[8] = {""};
 		
 	if(binarioArc == NULL){
-    printf("\nError de apertura del archivo. \n\n");
+    	perror("\nArchivo binario no encontrado");
+    	exit(0);
     }else{
         fread(&secciones,sizeof secciones,1,binarioArc);
         for(i = 0;i<secciones;i++){
